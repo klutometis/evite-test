@@ -1,0 +1,23 @@
+Purpose:
+
+    Create a scheduler that allows 'Events' to be scheduled for repeated sending.Ê			
+
+Details:
+
+    The Scheduler and Server take a function that should perform the actual 'Sending'.
+    The sender function has the following signature:
+        
+        def sender(recpt, msg):
+            pass
+
+    This should be called once per rcpt per interval.
+
+    The tests in test_service.py should test all of this functionality.
+    Pass as many tests as you can in the amount of time you are willing to devote.
+
+Things to do:
+
+    1) Make a basic RESTful events service that persists.
+       * It takes json and hands back json.
+       * The event has these things: msg, recipients (emails), start, interval, repeat
+    2) Make a Scheduler that sends these events out to the recipients given the start, interval and repeat.
