@@ -7,3 +7,11 @@
   #+END_SRC
 * TODO Stopping flask
   http://flask.pocoo.org/mailinglist/archive/2011/1/10/start-stop-flask/
+* TODO Simulate auto-increment with list
+  #+BEGIN_SRC python
+    events = []
+    def add_event(event):
+        events.append(event)
+        return len(events) - 1
+    print(add_event(2))
+  #+END_SRC
