@@ -1,3 +1,4 @@
 httplib2
 simplejson
 nose
+flask

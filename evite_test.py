@@ -1,10 +1,27 @@
 import time
+import simplejson as json
 from threading import Timer
 from math import floor
+from flask import Flask, request
 
 class Server:
-    pass
+    sender = None
+    port = None
+    app = Flask(__name__)
 
+    def __init__(self, sender, port):
+        self.sender = sender
+        self.port = port
+
+    @app.route('/events', methods=['POST'])
+    def create_event():
+        event = request.json
+        return json.dumps({'id': 0})
+
+    def start(self):
+        # self.app.run(debug=True, port=self.port)
+        self.app.run(port=self.port)
+        
 class Scheduler:
     messages = None
     sender = None

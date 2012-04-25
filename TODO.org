@@ -1,0 +1,9 @@
+* TODO Test Flask from curl
+  #+BEGIN_SRC sh
+    curl -X POST \
+        -H 'Content-type: application/json' \
+        -d '{"msg": "This is a test event"}' \
+        http://localhost:8080/events
+  #+END_SRC
+* TODO Stopping flask
+  http://flask.pocoo.org/mailinglist/archive/2011/1/10/start-stop-flask/
