@@ -22,6 +22,7 @@ def create_event():
     event = request.json
     events.append(event)
     event.update({'immediate': True})
+    print >> sys.stderr, 'create_event/sender', id(scheduler.sender)
     scheduler.add_event(**event)
     return json.dumps({'id': str(len(events) - 1)})
 
@@ -42,13 +43,15 @@ class Server:
     def start(self):
         init_app(self.sender)
         self.server = Process(target=lambda: app.run(port=self.port, debug=True))
+        # self.server = Thread(target=lambda: app.run(port=self.port, debug=True))
         self.server.start()
 
         # Wait for server to start
         time.sleep(1)
 
     def stop(self):
-        self.server.terminate()
+        pass
+        # self.server.terminate()
 
 class Scheduler:
     messages = None
