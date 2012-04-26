@@ -1,10 +1,8 @@
-import time
 import simplejson as json
-from threading import Timer
+from time import time, sleep
+from threading import Timer, Thread
 from flask import Flask, request
-from threading import Thread
 from multiprocessing import Process, Queue
-import sys
 
 app = Flask(__name__)
 events = None
