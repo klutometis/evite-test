@@ -51,7 +51,12 @@ class Server:
 
         # Wait for server to start
         time.sleep(1)
-        Thread(target=self.send_from_queue).start()
+
+        # Start thread that monitors the queue and sends when we get
+        # new events.
+        send_from_queue = Thread(target=self.send_from_queue)
+        send_from_queue.daemon = True
+        send_from_queue.start()
 
     def stop(self):
         self.server.terminate()
