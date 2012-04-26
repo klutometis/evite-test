@@ -90,7 +90,7 @@ def test_scheduler():
         for msg in sent_msgs[rcpt]:
             assert msg
             if last_msg:
-                assert (msg[1] - last_msg[1] - 1) < 0.01
+                assert msg[1] - last_msg[1] > 1
             last_msg = msg
 
 def test_scheduler_overlap():
@@ -184,7 +184,7 @@ def test_integration():
         for msg in sent_msgs[rcpt]:
             assert msg
             if last_msg:
-                assert (msg[1] - last_msg[1] - 1) < 0.01
+                assert msg[1] - last_msg[1] > 1
             last_msg = msg
 
 
