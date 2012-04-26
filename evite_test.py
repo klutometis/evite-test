@@ -82,23 +82,35 @@ class Scheduler:
         self.sender = sender
         self.messages = []
 
+    def send_repeatedly(self, recipient, message, repeat, interval):
+        """Send a message repeatedly to a recipient over an interval.
+
+        recipient -- to whom to send
+        message -- the which to send
+        repeat -- how many times to send
+        interval -- over which to send"""
+        while repeat:
+            self.sender(recipient, message)
+            sleep(interval)
+            repeat -= 1
+
     def add_event(self, msg, recipients, start, repeat, interval, immediate=False):
         """Send message to recipients beginning at start for repeat intervals.
 
-        msg -- the message to send (default "")
-        recipients -- the recipients to send to (default [])
-        start -- the time to start sending (default time.time())
-        interval -- seconds between sendings (default 1)
-        repeat -- the number of times to send (deault 3)"""
+        msg -- the message to send
+        recipients -- the recipients to send to
+        start -- the time to start sending
+        interval -- seconds between sendings
+        repeat -- the number of times to send"""
         for recipient in recipients:
-            for delay in [time.time() - start + interval * repeat
-                          for repeat in range(1, repeat + 1)]:
-                print delay, self.sender, recipient, msg
-                message = Timer(delay, self.sender, (recipient, msg))
-                if immediate:
-                    message.start()
-                else:
-                    self.messages.append(message)
+            delay = time() - start
+            message = Timer(delay,
+                            self.send_repeatedly,
+                            (recipient, msg, repeat, interval))
+            if immediate:
+                message.start()
+            else:
+                self.messages.append(message)
 
     def start(self):
         """Start the messages in the queue."""
