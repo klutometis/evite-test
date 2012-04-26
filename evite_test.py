@@ -30,26 +30,31 @@ def get_event(id):
     return json.dumps(events[id])
 
 class Server:
-    sender = None
     port = None
     server = None
+    scheduler = None
 
     def __init__(self, sender, port):
-        self.sender = sender
         self.port = port
+        self.scheduler = Scheduler(sender)
+
+    def send_from_queue(self):
+        event = queue.get()
+        self.scheduler.add_event(immediate=True, **event)
+        self.send_from_queue()
 
     def start(self):
-        init_app(self.sender)
-        self.server = Process(target=lambda: app.run(port=self.port, debug=True))
-        # self.server = Thread(target=lambda: app.run(port=self.port, debug=True))
+        init_app()
+        self.server = Process(target=app.run,
+                              kwargs={'port': self.port})
         self.server.start()
 
         # Wait for server to start
         time.sleep(1)
+        Thread(target=self.send_from_queue).start()
 
     def stop(self):
-        pass
-        # self.server.terminate()
+        self.server.terminate()
 
 class Scheduler:
     messages = None
