@@ -73,10 +73,9 @@ class Scheduler:
         interval -- seconds between sendings (default 1)
         repeat -- the number of times to send (deault 3)"""
         for recipient in recipients:
-            for delay in [floor(time.time() - start) + interval * repeat
+            for delay in [time.time() - start + interval * repeat
                           for repeat in range(1, repeat + 1)]:
                 print delay, self.sender, recipient, msg
-                print >> sys.stderr, 'add_event/sender', id(self.sender)
                 message = Timer(delay, self.sender, (recipient, msg))
                 if immediate:
                     message.start()
