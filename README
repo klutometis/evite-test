@@ -1,3 +1,7 @@
+Running the tests:
+
+    Run run-tests.sh, which starts the server and runs nosetests.
+
 Purpose:
 
     Create a scheduler that allows 'Events' to be scheduled for repeated sending.Ê			
