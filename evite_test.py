@@ -1,29 +1,27 @@
 import time
 import simplejson as json
 from threading import Timer
-from math import floor
 from flask import Flask, request
 from threading import Thread
-from multiprocessing import Process
+from multiprocessing import Process, Queue
 import sys
 
 app = Flask(__name__)
 events = None
-scheduler = None
+queue = None
 
-def init_app(sender=lambda x: x):
-    global events, scheduler
+def init_app():
+    global events, queue
+    queue = Queue()
     events = []
-    scheduler = Scheduler(sender)
 
 @app.route('/events', methods=['POST'])
 def create_event():
-    global events, scheduler
+    global events, queue
     event = request.json
     events.append(event)
-    event.update({'immediate': True})
-    print >> sys.stderr, 'create_event/sender', id(scheduler.sender)
-    scheduler.add_event(**event)
+    # Should we make this non-blocking?
+    queue.put(event)
     return json.dumps({'id': str(len(events) - 1)})
 
 @app.route('/events/<int:id>')
