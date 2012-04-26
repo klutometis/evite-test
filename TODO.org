@@ -15,3 +15,5 @@
         return len(events) - 1
     print(add_event(2))
   #+END_SRC
+* TODO Testing flask
+  See [[http://flask.pocoo.org/docs/testing/][this]]. Never runs the app, though, so won't serve from http.
