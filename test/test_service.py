@@ -140,14 +140,14 @@ def test_integration():
     h = httplib2.Http('.cache')
     sent_msgs = {}
     def sender(rcpt, msg):
-        print >> sys.stderr, id(sent_msgs)
+        print >> sys.stderr, 'sender/sent_msgs', id(sent_msgs)
         # print >> sys.stderr, rcpt, msg, sent_msgs
         if rcpt not in sent_msgs:
             sent_msgs[rcpt] = []
         sent_msgs[rcpt].append((msg, time.time()))
     
     # print >> sys.stderr, 'test_integration/sender', id(sender), dir(sender), sender.func_closure, sender.func_globals, sender.func_dict
-    print >> sys.stderr, 'test_integration/sender', id(sender)
+    # print >> sys.stderr, 'test_integration/sender', id(sender)
     port = 9091
     server = Server(sender, port)
     server.start()
@@ -173,14 +173,15 @@ def test_integration():
     
     # ensure that we haven't sent any until we start the scheduler
     assert not sent_msgs
+    sender('oeun toeunthuoen th', 'thnoeuthn ouoeutn heuo')
 
     # make sure we got a 200
     assert resp.status == 200, "Status (%d) was not 200 (success)" % resp.status
     time.sleep(5)
     server.stop()
 
-    print >> sys.stderr, id(sent_msgs)
-    print >> sys.stderr, sent_msgs, dir()
+    print >> sys.stderr, 'test_integration/sent_msgs', id(sent_msgs)
+    # print >> sys.stderr, sent_msgs, dir()
     assert len(sent_msgs) == 3, "We have messages for different recipients"
     for rcpt in [
             'josh.frederick@evite.com',
