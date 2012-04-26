@@ -75,12 +75,16 @@ class Server:
         self.server.terminate()
 
 class Scheduler:
-    messages = None
-    sender = None
+    messengers = None
+    """Messengers are threads responsible for repeatedly sending
+    messages."""
 
+    sender = None
+    """Sender delivers the message to the recipient."""
+    
     def __init__(self, sender):
         self.sender = sender
-        self.messages = []
+        self.messengers = []
 
     def send_repeatedly(self, recipient, message, repeat, interval):
         """Send a message repeatedly to a recipient over an interval.
@@ -104,23 +108,24 @@ class Scheduler:
         repeat -- the number of times to send"""
         for recipient in recipients:
             delay = time() - start
-            message = Timer(delay,
-                            self.send_repeatedly,
-                            (recipient, msg, repeat, interval))
+            messenger = Timer(delay,
+                              self.send_repeatedly,
+                              (recipient, msg, repeat, interval))
             if immediate:
-                message.start()
+                messenger.start()
             else:
-                self.messages.append(message)
+                self.messengers.append(messenger)
 
     def start(self):
-        """Start the messages in the queue."""
-        for message in self.messages:
-            message.start()
+        """Start the messengers in the queue."""
+        for messenger in self.messengers:
+            messenger.start()
 
     def stop(self):
-        """Stop the currently executing messages."""
-        for message in self.messages:
-            message.cancel()
+        """Stop the currently executing messengers."""
+        while self.messengers:
+            messenger = self.messengers.pop()
+            messenger.cancel()
 
 if __name__ == '__main__':
     init_app()
